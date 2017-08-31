@@ -1,0 +1,33 @@
+--- ruby/lib/rss/itunes.rb	2017-08-25 00:25:40.000000000 +0300
++++ ruby/lib/rss/itunes.rb_patched	2017-08-31 23:33:21.000000000 +0300
+@@ -340,6 +340,10 @@
+           self.content = value.content
+         else
+           begin
++            if ! /:/.match(value)
++              value = convert_second_to_full_time(value)
++            end
++          
+             @hour, @minute, @second = self.class.parse(value, @do_validate)
+           rescue ArgumentError
+             raise NotAvailableValueError.new(tag_name, value)
+@@ -388,6 +392,19 @@
+         super(duration)
+         duration.content = @content
+       end
++
++      def convert_second_to_full_time(second) 
++        second = @do_validate ? Integer(second) : second.to_i
++        seconds_in_an_hour = 3600
++
++        if second < seconds_in_an_hour
++          time_pattern = "%M:%S"
++        else
++          time_pattern = "%H:%M:%S"
++        end
++
++        Time.at(second).utc.strftime(time_pattern)
++      end
+     end
+   end
+ 

@@ -1,9 +1,9 @@
 #!/Users/rusdec/.rvm/rubies/ruby-2.4.1/bin/ruby -w
 
-require 'open-uri'
-require 'rexml/document'
+#require 'open-uri'
+#require 'rexml/document'
 require 'rss'
-include REXML
+#include REXML
 require 'tty-table'
 require 'tty-spinner'
 
@@ -39,10 +39,10 @@ end
 
 class Hobbytalks < Podcast
 
-  @@podcast_rss_url = 'http://hobbytalks.org/rss.xml'
 
   def initialize
-    self.parse(@@podcast_rss_url)
+    @podcast_rss_url = 'http://hobbytalks.org/rss.xml'
+    self.parse(@podcast_rss_url)
   end
 
   def download(podcast_number)

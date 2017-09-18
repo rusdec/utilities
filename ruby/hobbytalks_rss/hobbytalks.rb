@@ -39,10 +39,10 @@ end
 
 class Hobbytalks < Podcast
 
+  @@podcast_rss_url = 'http://hobbytalks.org/rss.xml'
 
   def initialize
-    @podcast_rss_url = 'http://hobbytalks.org/rss.xml'
-    self.parse(@podcast_rss_url)
+    self.parse(@@podcast_rss_url)
   end
 
   def download(podcast_number)
@@ -57,7 +57,34 @@ class Hobbytalks < Podcast
     puts "Файл: #{file_name}"
   end
 
-  def print
+  def get(param)
+    if param == 'all'
+      get_all
+    elsif param == 'last'
+      get_by_number (-1)
+    elsif param.to_i > 0
+      get_by_number(param.to_i)
+    else
+      false
+    end
+  end
+
+
+  private
+
+  def get_by_number(number)
+    podcast = @podcasts.items[number]
+    number = @podcasts.items.length-1 if number == -1
+    podcast_info = {
+      number: number,
+      subtitle: podcast.itunes_subtitle,
+      duration: podcast.itunes_duration.value,
+      summary: podcast.itunes_summary
+    }
+    print_podcast_info(podcast_info)
+  end
+
+  def get_all
     @podcasts.items.each_with_index do |item, index|
       podcast_info = {
         number: index,
@@ -69,7 +96,8 @@ class Hobbytalks < Podcast
     end
   end
 
-  private
+  def statistic
+  end
 
   def get_podcast_info(podcast_number)
     @podcast = @podcasts.items[podcast_number]
@@ -95,8 +123,10 @@ def run_command(command, param = '')
 
   case command
 
-    when 'print' then
-      hobbytalks.print
+    when 'get' then
+      hobbytalks.get param
+    when 'statistic'
+      hobbytalks.statistic
     when 'download' then
       if param.nil? || param.empty?
         help

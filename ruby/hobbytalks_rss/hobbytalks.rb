@@ -1,9 +1,4 @@
-#!/Users/rusdec/.rvm/rubies/ruby-2.4.1/bin/ruby -w
-
-#require 'open-uri'
-#require 'rexml/document'
 require 'rss'
-#include REXML
 require 'tty-table'
 require 'tty-spinner'
 

@@ -1,6 +1,6 @@
 require 'rss'
-require 'tty-table'
 require 'tty-spinner'
+require 'colorize'
 
 class Podcast 
 
@@ -68,26 +68,24 @@ class Hobbytalks < Podcast
   private
 
   def get_by_number(number)
-    podcast = @podcasts.items[number]
     number = @podcasts.items.length-1 if number == -1
+    print_podcast_info(build_podcast_info(number), true)
+  end
+  
+  def build_podcast_info(podcast_number)
     podcast_info = {
-      number: number,
-      subtitle: podcast.itunes_subtitle,
-      duration: podcast.itunes_duration.value,
-      summary: podcast.itunes_summary
+      number: podcast_number,
+      subtitle: @podcasts.items[podcast_number].itunes_subtitle,
+      duration: @podcasts.items[podcast_number].itunes_duration.value,
+      summary: @podcasts.items[podcast_number].itunes_summary
     }
-    print_podcast_info(podcast_info)
+
+    podcast_info
   end
 
   def get_all
-    @podcasts.items.each_with_index do |item, index|
-      podcast_info = {
-        number: index,
-        subtitle: item.itunes_subtitle,
-        duration: item.itunes_duration.value,
-        summary: item.itunes_summary
-      }
-      print_podcast_info(podcast_info)
+    @podcasts.items.each_index do |number|
+      print_podcast_info(build_podcast_info(number), false)
     end
   end
 
@@ -98,13 +96,16 @@ class Hobbytalks < Podcast
     @podcast = @podcasts.items[podcast_number]
   end
 
-  def print_podcast_info(podcast_info)
-    table = TTY::Table.new([
-      ['Выпуск №', podcast_info[:number]],
-      ['Название:', podcast_info[:subtitle]],
-      ['Продолжительность:', podcast_info[:duration]],
-    ])
-    puts table.render(:unicode)
+  def print_podcast_info_extend(podcast_info)
+      puts "#{"Краткое описание:".cyan} #{podcast_info[:summary]}"
+  end
+
+  def print_podcast_info(podcast_info, print_extend)
+      puts "Выпуск №#{podcast_info[:number]}".light_red
+      puts "#{"Название:".cyan} #{podcast_info[:subtitle]}"
+      puts "#{"Продолжительность:".cyan} #{podcast_info[:duration]}"
+      print_podcast_info_extend(podcast_info) if print_extend
+      puts "---"
   end
 end
 

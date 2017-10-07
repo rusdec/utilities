@@ -14,9 +14,9 @@ USE_TIME=true
 #</НАСТРОЙКИ>
 
 if [ -z $1 ]; then
-	echo "Формат: <PROGRAMM>:<FILE> <ARGS>"
-	echo "Пример: go:../main.go \"1 2 3\""
-	exit 1
+  echo "Формат: <PROGRAMM>:<FILE> <ARGS>"
+  echo "Пример: go:../main.go \"1 2 3\""
+  exit 1
 fi
 
 function get_state {
@@ -30,18 +30,18 @@ mFILE=`echo "${1}" | cut -d ':' -f2`
 
 
 if [ ! -z "${2}" ]; then
-	mARGS="${2}"
+  mARGS="${2}"
 else
-	mARGS=""
+  mARGS=""
 fi
 
 cstate=`get_state ${mFILE}`
 
 case ${mLANG} in
-	'go') mLANG=${mLANG}' run'
-	;;
-	*)	mLAng=${mLANG}
-	;;
+  "go") mLANG=${mLANG}" run"
+  ;;
+  *)mLAng=${mLANG}
+  ;;
 esac
 
 header=""
@@ -57,10 +57,10 @@ fi
 
 while true; do
   nstate=`get_state ${mFILE}`
-	if [[ ${nstate} != ${cstate} ]]; then
-		clear
-		eval "${header}; ${prepend} ${mLANG} ${mFILE} ${mARGS}"
+  if [[ ${nstate} != ${cstate} ]]; then
+    clear
+    eval "${header}; ${prepend} ${mLANG} ${mFILE} ${mARGS}"
     cstate=`get_state ${mFILE}`
-	fi
-	sleep ${SLEEP_TIME_SEC}
+  fi
+  sleep ${SLEEP_TIME_SEC}
 done

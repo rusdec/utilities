@@ -9,7 +9,7 @@ SLEEP_TIME_SEC=2
 SHOW_DATE=true
 
 #использовать time при выполнении
-USE_TIME=false
+USE_TIME=true
 
 #</НАСТРОЙКИ>
 
@@ -46,7 +46,7 @@ esac
 
 header=""
 if ( ${SHOW_DATE} ); then
-  header="date;echo"
+  header="date; echo;"
 fi
 
 prepend=""

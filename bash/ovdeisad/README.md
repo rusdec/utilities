@@ -10,7 +10,7 @@
 
 **Пример:**
 
-`ovdeisad.sh go:main.ru`
+`ovdeisad.sh go:main.go`
 
 **Опции в скрипте:**
 
